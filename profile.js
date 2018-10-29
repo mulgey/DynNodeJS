@@ -49,3 +49,5 @@ function Profile(username) {
 util.inherits( Profile, EventEmitter );
 
 module.exports = Profile;
+
+// Extra comment
