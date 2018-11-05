@@ -1,4 +1,5 @@
 var profile = require("./profile");
+var renderer = require("./renderer");
 
 //Handle HTTP route GET / and POST / i.e. Home
 function home (req, res) {
@@ -7,9 +8,10 @@ function home (req, res) {
       //show search
       res.statusCode = 200;
       res.setHeader('Content-Type', 'text/plain');
-      res.write("Header\n");
-      res.write("Search\n");
-      res.end("Footer\n");
+      renderer.görüş("header", {}, res);
+      renderer.görüş("search", {}, res);
+      renderer.görüş("footer", {}, res);
+      res.end();
     }
     //if url == "/" && POST
       //redirect to /:username
@@ -23,7 +25,7 @@ function home (req, res) {
     if (username.length > 0) {
       res.statusCode = 200;
       res.setHeader('Content-Type', 'text/plain');
-      res.write("Header\n");
+      renderer.görüş("header", {}, res);
 
       //get json from Treehouse
       var studentProfile = new profile(username);
@@ -40,15 +42,18 @@ function home (req, res) {
         }
 
         // simple response
-        res.write(`${values.username} has ${values.badges} badges.` + "\n");
-        res.end("Footer\n");
+        renderer.görüş("profile", values, res);
+        renderer.görüş("footer", {}, res);
+        res.end();
       });
 
       //on "error"
       studentProfile.on("error", function(error){
         //show error
-        res.write(error.message + "\n");
-        res.end("Footer\n");
+        renderer.görüş("header", {errorMessage: error.message}, res);
+        renderer.görüş("search", {}, res);
+        renderer.görüş("footer", {}, res);
+        res.end();
       });
     }
   }

@@ -18,8 +18,3 @@ const server = http.createServer((req, res) => {
 server.listen(port, hostname, () => {
   console.log(`Sunucu http://${hostname}:${port}/ adresinde tam takır.`);
 });
-
-
-//Function that handles the reading of files and merge in value
-  // read from file and get a string
-    // merge values in to string
