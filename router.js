@@ -5,26 +5,38 @@ var renderer = require("./renderer");
 function home (req, res) {
     //if url == "/" && GET
     if (req.url === "/")  {
-      //show search
-      res.statusCode = 200;
-      res.setHeader('Content-Type', 'text/plain');
-      renderer.görüş("header", {}, res);
-      renderer.görüş("search", {}, res);
-      renderer.görüş("footer", {}, res);
-      res.end();
+      if (req.method.toLowerCase() === "get") {
+        //show search
+        res.statusCode = 200;
+        res.setHeader('Content-Type', 'text/html');
+        renderer.görüş("header", {}, res);
+        renderer.görüş("search", {}, res);
+        renderer.görüş("footer", {}, res);
+        res.end();
+      } else {
+        // if url == "/" && POST
+
+        // get the post data from the body
+        req.on("data", chunk => {
+          var chunkString = chunk.toString();
+          // extract the username
+          var sorgu = querystring.parse(chunkString);
+          res.write(sorgu.username);
+          res.end();
+          // redirect to /:username
+        })
+        
+      }
     }
-    //if url == "/" && POST
-      //redirect to /:username
   }
    
-  
   //Handle HTTP route GET /:username i.e. /chalkers
   function user (req, res) {
     //if url == "/...."
     var username = req.url.replace("/", "");
     if (username.length > 0) {
       res.statusCode = 200;
-      res.setHeader('Content-Type', 'text/plain');
+      res.setHeader('Content-Type', 'text/html');
       renderer.görüş("header", {}, res);
 
       //get json from Treehouse
