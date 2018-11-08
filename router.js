@@ -1,5 +1,6 @@
 var profile = require("./profile");
 var renderer = require("./renderer");
+var querystring = require("querystring");
 
 //Handle HTTP route GET / and POST / i.e. Home
 function home (req, res) {
@@ -15,17 +16,16 @@ function home (req, res) {
         res.end();
       } else {
         // if url == "/" && POST
-
         // get the post data from the body
         req.on("data", chunk => {
           var chunkString = chunk.toString();
           // extract the username
           var sorgu = querystring.parse(chunkString);
-          res.write(sorgu.username);
-          res.end();
           // redirect to /:username
+          res.writeHead(303, {"Location": "/" + sorgu.username});
+          res.end();
+          
         })
-        
       }
     }
   }
